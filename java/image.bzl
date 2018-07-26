@@ -230,6 +230,7 @@ jar_app_layer = rule(
         "legacy_run_behavior": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
         "entrypoint_args": attr.string_list(),
+        "ports": attr.string_list(),
     }.items()),
     executable = True,
     outputs = _container.image.outputs,
@@ -244,6 +245,7 @@ def java_image(
         runtime_deps = [],
         layers = [],
         jvm_flags = [],
+        ports = [],
         **kwargs):
     """Builds a container image overlaying the java_binary.
 
@@ -286,6 +288,7 @@ def java_image(
         visibility = visibility,
         entrypoint_args = kwargs.get("args"),
         data = kwargs.get("data"),
+        ports = ports,
     )
 
 def _war_dep_layer_impl(ctx):
