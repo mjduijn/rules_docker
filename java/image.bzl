@@ -185,6 +185,9 @@ def _jar_app_layer_impl(ctx):
         for f in unavailable + [classpath_file]
     }
 
+    for item in ctx.files.data:
+        file_map["/".join([workdir, item.path])] = item
+
     return _container.image.implementation(
         ctx,
         # We use all absolute paths.
