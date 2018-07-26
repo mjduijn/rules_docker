@@ -170,7 +170,7 @@ def _jar_app_layer_impl(ctx):
     classpath_path = layer_file_path(ctx, classpath_file)
 
     # args and flags of the form $(location :some_target) are expanded to the path of the underlying file
-    args = [ctx.expand_location(arg, ctx.attr.data) for arg in ctx.attr.args]
+    args = [ctx.expand_location(arg, ctx.attr.data) for arg in ctx.attr.entrypoint_args]
     jvm_flags = [ctx.expand_location(flag, ctx.attr.data) for flag in ctx.attr.jvm_flags]
 
     entrypoint = [
@@ -226,6 +226,7 @@ jar_app_layer = rule(
         "workdir": attr.string(default = ""),
         "legacy_run_behavior": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
+        "entrypoint_args": attr.string_list(),
     }.items()),
     executable = True,
     outputs = _container.image.outputs,
@@ -280,7 +281,7 @@ def java_image(
         runtime_deps = runtime_deps,
         jar_layers = layers,
         visibility = visibility,
-        args = kwargs.get("args"),
+        entrypoint_args = kwargs.get("args"),
         data = kwargs.get("data"),
     )
 
